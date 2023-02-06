@@ -13,8 +13,8 @@ const saveData = async (urlLink) => {
         const getSectorDetails = await axios.get(`http://54.167.46.10/sector?name=${company_sector}
     `);
         const sectorDetails = getSectorDetails.data;
-        const data = sectorDetails.find(company_id => company_id);
-        const scoringData = data.performanceIndex.reduce((acc, scores) => {
+        const sectorData = sectorDetails.find(sector => sector.companyId === company_id);
+        const scoringData = sectorData.performanceIndex.reduce((acc, scores) => {
             if (scores.key === 'cpi') {
                 acc += scores.value * 10;
             }
@@ -38,7 +38,7 @@ const saveData = async (urlLink) => {
             company_sector,
             score: companyScore
         };
-        return await Company.create(companyData);
+        await Company.create(companyData);
     }
 };
 
